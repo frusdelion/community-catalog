@@ -1,17 +1,3 @@
-db:
-  image: mysql:5.7.10
-  environment:
-    MYSQL_DATABASE: portus
-    MYSQL_ROOT_PASSWORD: ${ROOTPASSWORD}
-    MYSQL_USER: portus
-    MYSQL_PASSWORD: ${DBPASSWORD}
-  tty: true
-  stdin_open: true
-  volume_driver: ${DRIVER}
-  volumes:
-  - ${PFX}-db:/var/lib/mysql
-  labels:
-    registry.portus.db: 1
 sslproxy:
   image: nginx:1.9.9
   tty: true
@@ -22,8 +8,6 @@ sslproxy:
   volumes:
   - ${PFX}-certs:/etc/nginx/certs:ro
   - ${PFX}-proxy:/etc/nginx/conf.d:ro
-  labels:
-    io.rancher.scheduler.affinity:container_label_soft: registry.portus.db=1
 registry:
   image: registry:2.3.1
   environment:
@@ -51,7 +35,7 @@ registry:
   volumes:
   - ${PFX}-certs:/certs
   - ${PFX}-data:/var/lib/registry
-lb:
+lb23:
   image: rancher/load-balancer-service
   tty: true
   stdin_open: true
@@ -71,7 +55,7 @@ portus:
   image: sshipway/portus:2.0.5
   environment: 
     PORTUS_MACHINE_FQDN: ${DOMAIN}
-    PORTUS_PRODUCTION_HOST: db
+    PORTUS_PRODUCTION_HOST: ${DBHOST}
     PORTUS_PRODUCTION_DATABASE: portus
     PORTUS_PRODUCTION_USERNAME: portus
     PORTUS_PRODUCTION_PASSWORD: ${DBPASSWORD}
@@ -103,9 +87,6 @@ portus:
   volumes:
   - ${PFX}-certs:/certs
   - ${PFX}-proxy:/etc/nginx/conf.d
-  links:
-  - db:db
   labels:
     io.rancher.container.pull_image: always
-    io.rancher.scheduler.affinity:container_label_soft: registry.portus.db=1
     registry.portus.app: 1
