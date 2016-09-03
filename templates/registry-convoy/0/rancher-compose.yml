@@ -16,6 +16,12 @@
       default: 443
       required: true
       type: "int"
+    - variable: "DBHOST"
+      label: "DB Hostname or IP"
+      description: "Hostname or IP of Database"
+      required: true
+      type: "string"
+      default: "galera.galera"
     - variable: "DBPASSWORD"
       label: "DB Password"
       description: "Password for Portus database access, must be 8 characters or longer"
@@ -23,8 +29,8 @@
       default: password
       type: "password"
     - variable: "ROOTPASSWORD"
-      label: "DB Root Password"
-      description: "Root Password for MySQL database, must be 8 characters or longer.  This is not normally used."
+      label: "Secret Key Base"
+      description: "Secret Key Base for Portus"
       required: true
       default: password
       type: "password"
@@ -97,11 +103,9 @@
       required: false
       default: "password"
       type: "password"
-db:
-  scale: 1
 sslproxy:
   scale: 1
-lb:
+lb23:
   load_balancer_config:
     haproxy_config: {}
   health_check:
