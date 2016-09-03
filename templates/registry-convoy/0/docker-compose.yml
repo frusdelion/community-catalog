@@ -35,7 +35,7 @@ registry:
   volumes:
   - ${PFX}-certs:/certs
   - ${PFX}-data:/var/lib/registry
-lb23:
+lb:
   image: rancher/load-balancer-service
   tty: true
   stdin_open: true
