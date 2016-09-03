@@ -1,5 +1,5 @@
 sslproxy:
-  image: nginx:1.9.9
+  image: nginx:stable-alpine
   tty: true
   stdin_open: true
   links:
